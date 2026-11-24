@@ -79,9 +79,13 @@ namespace TankBattleOnline
                 lblWins.Text = "得分：0 / 胜局：0";
             }
 
-            lblTime.Text = "倒计时：" + state.RemainingSeconds.ToString();
             lblRound.Text = "局数：" + state.RoundNumber.ToString() + "/" + state.TotalRounds.ToString();
             lblFps.Text = "FPS：" + currentFps.ToString();
+
+            int remainingSeconds = state.RemainingSeconds;
+            lblTime.Text = state.RoundOver
+                ? "倒计时：本局结束"
+                : string.Format("倒计时：{0:00}:{1:00}", remainingSeconds / 60, remainingSeconds % 60);
 
             string roleText = role == ClientRole.Host ? "主持游戏" : "加入游戏";
             lblMode.Text = "模式：" + roleText + "\r\n连接：" + connectionText;
