@@ -33,7 +33,7 @@ namespace TankBattleOnline
             remoteConnectionTokens.Clear();
             roomManager.CreateDefaultRoom();
             roomManager.Room.SelectedPlayerId = selfPlayerId;
-            ShowRoomPage("填写主机 IPv4 和端口，选择 Player 后加入房间。");
+            ShowRoomPage("填写主机 IPv4 和端口，也可在地址栏输入 IPv4:端口。选择 Player 后加入房间。");
         }
 
         private void btnOpenRoom_Click(object sender, EventArgs e)
@@ -256,7 +256,7 @@ namespace TankBattleOnline
 
         private bool ApplyRoomControlsToState()
         {
-            if (!roomInfoView.ApplyTo(roomManager.Room))
+            if (!roomInfoView.ApplyTo(roomManager.Room, currentRole))
             {
                 return false;
             }
