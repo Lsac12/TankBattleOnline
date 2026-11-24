@@ -85,20 +85,17 @@ namespace TankBattleOnline
                 lblTime.Text = "倒计时：" + state.RemainingSeconds.ToString();
                 lblRound.Text = "局数：" + state.RoundNumber.ToString() + "/" + state.TotalRounds.ToString();
                 lblFps.Text = "FPS：" + currentFps.ToString();
-
-                // 倒计时告急 / 自身残血
-                bool timeWarning = !state.RoundOver && state.RemainingSeconds <= TimeWarningSeconds;
-                bool lowHpWarning = self != null && self.Hp > 0 && self.Hp * 100 <= self.MaxHp * LowHpPercent;
-
-                lblTime.ForeColor = timeWarning ? WarningValueColor : NormalValueColor;
-                lblHp.ForeColor = lowHpWarning ? WarningValueColor : NormalValueColor;
-
-                string roleText = role == ClientRole.Host ? "主持游戏" : "加入游戏";
             }
 
             lblTime.Text = "倒计时：" + state.RemainingSeconds.ToString();
             lblRound.Text = "局数：" + state.RoundNumber.ToString() + "/" + state.TotalRounds.ToString();
             lblFps.Text = "FPS：" + currentFps.ToString();
+
+            // 倒计时告急 / 自身残血
+            bool timeWarning = !state.RoundOver && state.RemainingSeconds <= TimeWarningSeconds;
+            bool lowHpWarning = self != null && self.Hp > 0 && self.Hp * 100 <= self.MaxHp * LowHpPercent;
+            lblTime.ForeColor = timeWarning ? WarningValueColor : NormalValueColor;
+            lblHp.ForeColor = lowHpWarning ? WarningValueColor : NormalValueColor;
 
             string roleText = role == ClientRole.Host ? "主持游戏" : "加入游戏";
             lblMode.Text = "模式：" + roleText + "\r\n连接：" + connectionText;
