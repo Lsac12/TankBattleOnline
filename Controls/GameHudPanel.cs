@@ -82,18 +82,19 @@ namespace TankBattleOnline
                 lblPlayer.Text = "Player：P" + selfPlayerId.ToString();
                 lblHp.Text = "生命：- / 强化：-";
                 lblWins.Text = "得分：0 / 胜局：0";
-                lblTime.Text = "倒计时：" + state.RemainingSeconds.ToString();
-                lblRound.Text = "局数：" + state.RoundNumber.ToString() + "/" + state.TotalRounds.ToString();
-                lblFps.Text = "FPS：" + currentFps.ToString();
             }
 
-            lblTime.Text = "倒计时：" + state.RemainingSeconds.ToString();
             lblRound.Text = "局数：" + state.RoundNumber.ToString() + "/" + state.TotalRounds.ToString();
             lblFps.Text = "FPS：" + currentFps.ToString();
 
-            // 倒计时告急 / 自身残血
-            bool timeWarning = !state.RoundOver && state.RemainingSeconds <= TimeWarningSeconds;
-            bool lowHpWarning = self != null && self.Hp > 0 && self.Hp * 100 <= self.MaxHp * LowHpPercent;
+            int remainingSeconds = state.RemainingSeconds;
+            lblTime.Text = state.RoundOver
+                ? "倒计时：本局结束"
+                : string.Format("倒计时：{0:00}:{1:00}", remainingSeconds / 60, remainingSeconds % 60);
+
+            bool timeWarning = !state.RoundOver && remainingSeconds <= TimeWarningSeconds;
+            bool lowHpWarning = !state.RoundOver && self != null && self.PlayerId == selfPlayerId
+                && self.Hp > 0 && self.Hp * 100 <= self.MaxHp * LowHpPercent;
             lblTime.ForeColor = timeWarning ? WarningValueColor : NormalValueColor;
             lblHp.ForeColor = lowHpWarning ? WarningValueColor : NormalValueColor;
 
