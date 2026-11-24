@@ -1,5 +1,7 @@
 using System;
 using System.Drawing;
+using System.Net;
+using System.Net.Sockets;
 using System.Windows.Forms;
 
 namespace TankBattleOnline
@@ -124,18 +126,37 @@ namespace TankBattleOnline
             binding = false;
         }
 
-        public bool ApplyTo(RoomState room)
+        public bool ApplyTo(RoomState room, ClientRole role)
         {
+            string hostIp = txtHostIp.Text.Trim();
+            string portText = txtPort.Text;
+            int separator = hostIp.IndexOf(':');
+
+            if (role == ClientRole.Client && separator >= 0 && separator == hostIp.LastIndexOf(':'))
+            {
+                portText = hostIp.Substring(separator + 1);
+                hostIp = hostIp.Substring(0, separator).Trim();
+
+                IPAddress address;
+                if (!IPAddress.TryParse(hostIp, out address) || address.AddressFamily != AddressFamily.InterNetwork)
+                {
+                    MessageBox.Show("请在主机地址中填写有效的 IPv4 地址，例如 192.168.1.10:9000。");
+                    return false;
+                }
+
+                hostIp = address.ToString();
+            }
+
             int port;
 
-            if (!int.TryParse(txtPort.Text, out port) || port <= 0 || port > 65535)
+            if (!int.TryParse(portText, out port) || port <= 0 || port > 65535)
             {
                 MessageBox.Show("端口必须是 1-65535 的数字。");
                 return false;
             }
 
             RoomConfig config = room.Config;
-            config.HostIp = txtHostIp.Text.Trim();
+            config.HostIp = hostIp;
             config.Port = port;
             config.RoomName = txtRoomName.Text.Trim();
             config.InitialHp = (int)numHp.Value;
